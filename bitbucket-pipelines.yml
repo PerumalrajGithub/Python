@@ -21,10 +21,12 @@ pipelines:
             - echo "Building Docker image..."
             - docker build -t developer:latest .  # Build with 'latest' tag
             - echo "Tagging Docker image..."
-            - UNIQUE_TAG="${BITBUCKET_COMMIT:0:7}"  # Use the first 7 characters of the commit hash for a unique tag
+            - UNIQUE_TAG="${BITBUCKET_BUILD_NUMBER}"  # Use Bitbucket build number for a unique tag
             - docker tag developer:latest 594699837196.dkr.ecr.us-east-2.amazonaws.com/developer:$UNIQUE_TAG  # Tag with the unique tag
+            - docker tag developer:latest 594699837196.dkr.ecr.us-east-2.amazonaws.com/developer:latest  # Tag as 'latest'
             - echo "Pushing Docker image to ECR..."
             - docker push 594699837196.dkr.ecr.us-east-2.amazonaws.com/developer:$UNIQUE_TAG  # Push using the unique tag
+            - docker push 594699837196.dkr.ecr.us-east-2.amazonaws.com/developer:latest  # Push the 'latest' tag
 
 definitions:
   services:
